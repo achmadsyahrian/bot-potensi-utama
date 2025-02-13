@@ -3,14 +3,14 @@ const qrcode = require("qrcode-terminal");
 
 // Inisialisasi Client
 const client = new Client({
-  authStrategy: new LocalAuth(), // Simpan session secara lokal
+  authStrategy: new LocalAuth(),
   puppeteer: {
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-  }
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  },
 });
 
-// Variabel untuk menyimpan pesan dan daftar pertanyaan
+// Variabel untuk menyimpan pertanyaan
 const pertanyaan = [
   "Apa saja syarat pendaftaran?",
   "Apakah ada biaya pendaftarannya?",
@@ -27,14 +27,14 @@ const pertanyaan = [
   "Berapa biaya kuliahnya?",
   "Kuliahnya dari jam berapa saja ya?",
   "Akreditasinya apa?",
-  "Fasilitasnya apa saja kak?"
+  "Fasilitasnya apa saja kak?",
 ];
 
 const pesan = {
   salam: (name) => {
     let daftarPertanyaan = pertanyaan
-      .map((item, index) => `${index + 1}. ${item}`) // Tambahkan nomor di depan pertanyaan
-      .join("\n"); // Gabungkan pertanyaan menjadi string dengan pemisah baris baru
+      .map((item, index) => `${index + 1}. ${item}`)
+      .join("\n");
 
     return `Halo ${name}! 👋\n\nSelamat datang di *Universitas Potensi Utama*!\nAda yang bisa mimin bantu? 🥰\n\n${daftarPertanyaan}\n\nMohon pilih opsi angka untuk informasinya yaa.`;
   },
@@ -54,10 +54,8 @@ const pesan = {
     `💸 *Berapa biaya kuliahnya?*\n\nBiaya kuliah biasanya tergantung pada program studi yang dipilih, sesuai dengan brosur yang tersedia. 😊`,
     `⏰ *Kuliahnya dari jam berapa saja ya?*\n\nPerkuliahan memiliki 3 shift:\n- Kelas pagi: 08.30-12.30\n- Kelas siang: 13.00-17.00\n- Kelas sore: 17.30-21.00`,
     `🎓 *Akreditasinya apa?*\n\nAkreditasi kampus kita sudah *Baik Sekali*. Berikut rincian akreditasi prodi:\n- Teknik Industri: Baik\n- Informatika: Baik Sekali\n- Sistem Informasi: Baik Sekali\n- Rekayasa Perangkat Lunak: Baik\n- Desain Komunikasi Visual: Baik Sekali\n- Film dan Televisi: Baik Sekali\n- Hubungan Internasional: Baik\n- Pendidikan Bahasa Inggris: Baik Sekali\n- Perbankan Syariah: Baik Sekali\n- Akuntansi: Baik Sekali\n- Manajemen: Baik Sekali\n- Psikologi: Baik\n- Hukum: Baik`,
-    `🏢 *Fasilitasnya apa saja kak?*\n\nFasilitas di UPU meliputi:\n- Aula Gedung B\n- Perpustakaan (Library)\n- International Relation Lab\n- Mushollah\n- Investment Gallery\n- Mini Bank\n- Art Gallery\n- Lab Komputer\n- Studio Film & Fotografi\n- Podcast Studio\n- Ruang Peradilan Semu\n- Ruang Konseling\n- Ruang Inkubator Bisnis\n- Lab Fisika\n- Area Mural`
+    `🏢 *Fasilitasnya apa saja kak?*\n\nFasilitas di UPU meliputi:\n- Aula Gedung B\n- Perpustakaan (Library)\n- International Relation Lab\n- Mushollah\n- Investment Gallery\n- Mini Bank\n- Art Gallery\n- Lab Komputer\n- Studio Film & Fotografi\n- Podcast Studio\n- Ruang Peradilan Semu\n- Ruang Konseling\n- Ruang Inkubator Bisnis\n- Lab Fisika\n- Area Mural`,
   ],
-  tidakDikenali:
-    `Maaf, saya tidak mengerti pesan Anda. Ketik "Halo" untuk memulai percakapan. 😊`,
 };
 
 // Generate QR Code
@@ -71,25 +69,14 @@ client.on("ready", () => {
   console.log("Bot sudah siap!");
 });
 
-// Menangani pesan masuk dan memberikan respon
+// Menangani pesan masuk
 client.on("message", async (message) => {
+  if (message.from.includes("@g.us")) {
+    return; // Abaikan pesan dari grup
+  }
+
   const chat = message.body.toLowerCase(); // Pesan dari user
   const name = message._data.notifyName; // Nama pengirim
-
-  // Pastikan ada quoted message sebelum mengaksesnya
-  if (message.hasQuotedMsg) {
-    try {
-      const quotedMsg = await message.getQuotedMessage();
-      if (quotedMsg) {
-        console.log("Pesan yang dikutip:", quotedMsg.body);
-      } else {
-        console.log("Pesan yang dikutip tidak ditemukan.");
-      }
-    } catch (error) {
-      console.error("Gagal mendapatkan pesan yang dikutip:", error.message);
-    }
-  }
-  
 
   // Menyapa dan memberikan daftar pertanyaan
   const kataKunciSalam = ["halo", "hi", "hai", "bantuan", "info"];
@@ -110,8 +97,7 @@ client.on("message", async (message) => {
     return;
   }
 
-  // Jika pesan tidak dikenali
-  message.reply(pesan.tidakDikenali);
+  // Tidak membalas jika pesan tidak dikenali
 });
 
 // Inisialisasi client
