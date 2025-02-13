@@ -4,6 +4,10 @@ const qrcode = require("qrcode-terminal");
 // Inisialisasi Client
 const client = new Client({
   authStrategy: new LocalAuth(), // Simpan session secara lokal
+  puppeteer: {
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+  }
 });
 
 // Variabel untuk menyimpan pesan dan daftar pertanyaan
