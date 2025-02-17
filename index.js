@@ -98,9 +98,9 @@ client.on("message", async (message) => {
   }
 
   // Menangani pesan yang tidak dikenali
-  message.reply(
-    `Maaf kak, mimin belum paham pertanyaan kakak. 😢\n\nSilakan pilih angka dari daftar pertanyaan atau ketik "bantuan" untuk melihat daftar pertanyaan yang tersedia. 😊`
-  );
+  // message.reply(
+  //   `Maaf kak, mimin belum paham pertanyaan kakak. 😢\n\nSilakan pilih angka dari daftar pertanyaan atau ketik "bantuan" untuk melihat daftar pertanyaan yang tersedia. 😊`
+  // );
 });
 
 // Inisialisasi client
