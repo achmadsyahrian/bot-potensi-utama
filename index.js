@@ -79,7 +79,12 @@ client.on("message", async (message) => {
   const name = message._data.notifyName; // Nama pengirim
 
   // Menyapa dan memberikan daftar pertanyaan
-  const kataKunciSalam = ["halo", "hi", "hai", "bantuan", "info"];
+  if (chat.includes("halo")) {
+    message.reply(pesan.salam(name));
+    return;
+  }
+
+  const kataKunciSalam = ["hi", "hai", "bantuan", "info"];
   if (kataKunciSalam.includes(chat)) {
     message.reply(pesan.salam(name));
     return;
@@ -93,7 +98,9 @@ client.on("message", async (message) => {
   }
 
   if (chat === "terima kasih" || chat === "makasih" || chat === "makasih yaa") {
-    message.reply("Sama-sama, kak! 😊 Semoga informasi yang mimin berikan bermanfaat ya! Jika ada pertanyaan lain, silakan tanyakan saja.");
+    message.reply(
+      "Sama-sama, kak! 😊 Semoga informasi yang mimin berikan bermanfaat ya! Jika ada pertanyaan lain, silakan tanyakan saja."
+    );
     return;
   }
 
